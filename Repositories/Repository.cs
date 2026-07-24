@@ -20,36 +20,80 @@ namespace backend.Repositories
 
         public async Task AddAsync(T entity)
         {
-            _dbSet.Add(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _dbSet.Add(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                var erroOriginal = ex.InnerException?.Message;
+                throw new Exception(erroOriginal, ex);
+            }
+            
         }
 
 
         public IQueryable<T> GetAllAsync()
         {
-            return  _dbSet.AsNoTracking();
+            try
+            {
+                return _dbSet.AsNoTracking();
+            }
+            catch (DbUpdateException ex)
+            {
+                var erroOriginal = ex.InnerException?.Message;
+                throw new Exception(erroOriginal, ex);
+            }
+            
         }
 
         public async Task<T?> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            try
+            {
+                return await _dbSet.FindAsync(id);
+            }
+            catch (DbUpdateException ex)
+            {
+                var erroOriginal = ex.InnerException?.Message;
+                throw new Exception(erroOriginal, ex);
+            }
+                
         }
        
 
         public void  Update(T entity)
         {
-             _dbSet.Update(entity);
-            _context.SaveChanges();
+            try
+            {
+                _dbSet.Update(entity);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var erroOriginal = ex.InnerException?.Message;
+                throw new Exception(erroOriginal, ex);
+            }
         }
 
         public async Task DeleteAsync(int id) 
         {
-            var entity = await _dbSet.FindAsync(id);
-
-            if(entity != null)
+            try
             {
-                _dbSet.Remove(entity);
+                var entity = await _dbSet.FindAsync(id);
+
+                if(entity != null)
+                {
+                    _dbSet.Remove(entity);
+                }    
             }
+            catch (DbUpdateException ex)
+            {
+                var erroOriginal = ex.InnerException?.Message;
+                throw new Exception(erroOriginal, ex);
+            }
+            
         }
     }
 }
