@@ -56,9 +56,11 @@ public class PedidosService : IPedidosService
     public async Task PutPedido(int id)
     {
         var pedido = await GetPedidoById(id);
+        if (pedido != null)
+            throw new KeyNotFoundException("Pedido não encontrado.");
 
         var itens = await _itensPedidoService.GetAllByIdItensPedidos(id);
-
+        
         pedido.ValorTotal = itens.Sum(x => (decimal)x.Quantidade * x.PrecoUnitario);
        
         _pedidosRepository.Update(pedido);
