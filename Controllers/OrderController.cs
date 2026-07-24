@@ -1,0 +1,49 @@
+using backend.Interface;
+using backend.Model;
+using Microsoft.AspNetCore.Mvc;
+
+namespace backend.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class OrderController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrderController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetOrders()
+    {
+        var orders = await _orderService.GetAllOrders();
+
+        return Ok(orders);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetOrderById(int id)
+    {
+        var order = await _orderService.GetOrderById(id);
+
+        return Ok(order);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder(Order order)
+    {
+        await _orderService.CreateOrder(order);
+
+        return Ok(order);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateOrder(int id)
+    {
+        await _orderService.UpdateOrder(id);
+
+        return Ok(id);
+    }
+}

@@ -22,11 +22,11 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IMesaService, MesaService>();
-builder.Services.AddScoped<IItensPedidoService, ItensPedidoService>();
-builder.Services.AddScoped<ICategoriaService, CategoriaService>();
-builder.Services.AddScoped<IPedidosService, PedidosService>();
-builder.Services.AddScoped<IProdutosService, ProdutosService>();
+builder.Services.AddScoped<ITableService, TableService>();
+builder.Services.AddScoped<IOrderItemService, OrderItemService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
