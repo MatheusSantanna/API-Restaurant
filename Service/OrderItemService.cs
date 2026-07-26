@@ -25,7 +25,7 @@ public class OrderItemService : IOrderItemService
             OrderId = dto.OrderId,
             ProductId = dto.ProductId,
             Quantity = dto.Quantity,
-            UnitPrice = dto.UnitPrice
+            UnitPrice = dto.Price
         };
 
         await _repository.AddAsync(orderItem);
@@ -43,7 +43,7 @@ public class OrderItemService : IOrderItemService
                 OrderId = x.OrderId,
                 ProductId = x.ProductId,
                 Quantity = x.Quantity,
-                UnitPrice = x.UnitPrice
+                Price = x.UnitPrice
             })
             .ToListAsync();
     }

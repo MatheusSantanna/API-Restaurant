@@ -1,3 +1,4 @@
+using backend.DTO;
 using backend.Interface;
 using backend.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder(Order order)
+    public async Task<IActionResult> CreateOrder(CreateOrderDto order)
     {
         await _orderService.CreateOrder(order);
 

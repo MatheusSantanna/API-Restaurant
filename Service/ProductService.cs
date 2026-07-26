@@ -10,14 +10,11 @@ namespace backend.Service;
 public class ProductService : IProductService
 {
     private readonly IRepository<Product> _productRepository;
-    private readonly ICategoryService _categoryService;
-
+    
     public ProductService(
-        IRepository<Product> productRepository,
-        ICategoryService categoryService)
+        IRepository<Product> productRepository)
     {
         _productRepository = productRepository;
-        _categoryService = categoryService;
     }
 
     public async Task CreateProduct(ProductDto dto)

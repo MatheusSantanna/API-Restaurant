@@ -3,14 +3,8 @@ namespace backend.DTO;
 public class CreateOrderDto
 {
     public int TableId { get; set; }
-    
     public List<CreateOrderItemDto> Items { get; set; } = new();
-
-    public DateTime OrderDate { get; set; }
-
-    public string OrderStatus { get; set; }
-
-    public decimal TotalAmount { get; set; }
+    public DateTime OrderDate { get; set; } 
 }
 
 public class CreateOrderItemDto

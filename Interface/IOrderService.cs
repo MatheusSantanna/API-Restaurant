@@ -5,9 +5,9 @@ namespace backend.Interface;
 
 public interface IOrderService
 {
-    Task<Order> CreateOrder(Order order);
+    Task<Order> CreateOrder(CreateOrderDto order);
 
-    Task<List<CreateOrderDto>> GetAllOrders();
+    Task<List<OrderListDTO>> GetAllOrders();
 
     Task<Order?> GetOrderById(int id);
 

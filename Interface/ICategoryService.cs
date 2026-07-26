@@ -1,10 +1,11 @@
+using backend.DTO;
 using backend.Model;
 
 namespace backend.Interface;
 
 public interface ICategoryService
 {
-    Task<List<Category>> GetAllCategories();
+    Task<List<CategoryDTO>> GetAllCategories();
 
     Task<Category?> GetCategoryById(int id);
 

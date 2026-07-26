@@ -1,3 +1,4 @@
+using backend.DTO;
 using backend.Interface;
 using backend.Model;
 using backend.Repositories;
@@ -8,7 +9,7 @@ namespace backend.Service;
 public class CategoryService : ICategoryService
 {
     private readonly IRepository<Category> _repository;
-
+    
     public CategoryService(IRepository<Category> repository)
     {
         _repository = repository;
@@ -20,9 +21,18 @@ public class CategoryService : ICategoryService
         return category;
     }
 
-    public async Task<List<Category>> GetAllCategories()
+    public async Task<List<CategoryDTO>> GetAllCategories()
     {
-        return await _repository.GetAllAsync().ToListAsync();
+        return await _repository.GetAllAsync()
+            .OrderBy(x => x.Name)
+            .Select(x => new CategoryDTO
+            {
+                Name = x.Name,
+                Products = x.Products
+                    .OrderBy(x => x.Name)
+                    .Select(y => y.Name)
+                    .ToList()
+            }).ToListAsync();
     }
 
     public async Task<Category?> GetCategoryById(int id)

@@ -8,7 +8,7 @@
 
         public DateTime OrderDate { get; set; }
 
-        public string OrderStatus { get; set; }
+        public string OrderStatus { get; set; } = "Aberto";
 
         public decimal TotalAmount { get; set; }
 
