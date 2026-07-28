@@ -5,7 +5,7 @@ namespace backend.Interface
 {
     public interface ITableService
     {
-        Task<Table> CreateTable(Table table);
+        Task<Table> CreateTable(TableDto table);
 
         Task<List<TableDto>> GetAllTables();
 

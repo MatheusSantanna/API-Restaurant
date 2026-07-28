@@ -6,6 +6,15 @@
 
         public int Number { get; set; }
 
-        public bool IsAvailable { get; set; }
+        public virtual TableStatus  TableStatus { get; set; }
+        
+    }
+    
+    
+    public enum TableStatus
+    {
+        Occupied,
+        Available,
+        Rserved
     }
 }

@@ -23,15 +23,20 @@ namespace backend.Service
                 .OrderBy(table => table.Number)
                 .Select(x => new TableDto
                 {
-                    Id = x.Id,
                     Number = x.Number,
-                    IsAvailable = x.IsAvailable
+                    TableStatus = x.TableStatus
                 })
                 .ToListAsync();
         }
 
-        public async Task<Table> CreateTable(Table table)
+        public async Task<Table> CreateTable(TableDto tableDto)
         {
+            var table = new Table
+            {
+                Number = tableDto.Number,
+                TableStatus = TableStatus.Available
+            };
+            
             await _repository.AddAsync(table);
             return table;
         }

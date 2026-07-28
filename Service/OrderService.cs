@@ -29,7 +29,7 @@ public class OrderService : IOrderService
         {
             TableId = dto.TableId,
             OrderDate = DateTime.Now.Date,
-            OrderStatus = "Aberto",
+            OrderStatus = OrderStatus.Processing,
             Items = new List<OrderItem>()
         };
         

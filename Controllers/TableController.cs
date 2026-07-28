@@ -25,7 +25,7 @@ public class TableController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateTable(Table table)
+    public async Task<ActionResult> CreateTable(TableDto table)
     {
         await _tableService.CreateTable(table);
 
