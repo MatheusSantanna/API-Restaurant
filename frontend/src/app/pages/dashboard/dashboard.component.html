@@ -1,0 +1,93 @@
+<div class="min-h-screen bg-base-300">
+
+    <!-- HEADER -->
+    <div class="navbar bg-base-100 border-b border-base-200 px-6 shadow">
+
+        <div class="flex-1">
+
+            <div>
+                <h1 class="text-2xl font-bold">
+                    Gestão de Mesas
+                </h1>
+
+                <p class="text-sm opacity-70">
+                    Restaurante Sabor & Harmonia
+                </p>
+            </div>
+
+        </div>
+
+        <div class="flex gap-3">
+
+        </div>
+
+    </div>
+
+    <!-- CONTEÚDO -->
+
+    <div class="p-6">
+
+        <!-- FILTROS -->
+
+        <div class="flex justify-between items-center mb-6">
+
+            <div class="join">
+
+                <button class="btn btn-active join-item">
+                    Todas
+                </button>
+
+                <button class="btn join-item">
+                    Livres
+                </button>
+
+                <button class="btn join-item">
+                    Ocupadas
+                </button>
+
+                <button class="btn join-item">
+                    Reservadas
+                </button>
+
+            </div>
+
+            <input type="text" placeholder="Buscar mesa..." class="input input-bordered w-80" />
+
+        </div>
+
+        <!-- TÍTULO -->
+
+        <h2 class="text-xl font-bold mb-5">
+
+            Salão Principal
+
+        </h2>
+
+        <!-- GRID -->
+
+        <div class="grid
+                    grid-cols-2
+                    md:grid-cols-3
+                    lg:grid-cols-5
+                    xl:grid-cols-6
+                    gap-5">
+
+            <!-- CARD -->
+            <div class="aura" [ngClass]="auraClass(table.tableStatus)" *ngFor="let table of table">
+                <div class="card bg-base-100 shadow hover:scale-105 duration-200 cursor-pointer">
+                    <div class="card-body items-center">
+                        <div class="badge rounded-full" [ngClass]="tableBadgeClass(table.tableStatus)">
+                            <div class="status status-md" [ngClass]="statusBadgeClass(table?.tableStatus)"></div>
+                            {{ statusLabel(table.tableStatus) }}
+                        </div>
+                        <h2 class="text-black font-bold text-lg">
+                            Mesa {{ table.number }}
+                        </h2>
+                        <button class="btn btn-sm mt-3 w-full" [ngClass]="btnClass(table.tableStatus)"
+                            (click)="onOrderButtonClick(table)">
+                            {{ btnLabel(table.tableStatus) }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>

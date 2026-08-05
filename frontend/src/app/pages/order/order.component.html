@@ -1,0 +1,173 @@
+<div class="min-h-screen bg-base-300">
+
+  <div class="navbar bg-base-100 border-b border-base-200 px-6 shadow">
+
+    <div class="flex-1">
+
+      <div>
+        <h1 class="text-2xl font-bold">
+          Pedido Mesas
+        </h1>
+
+        <p class="text-sm opacity-70">
+          Restaurante Sabor & Harmonia
+        </p>
+      </div>
+
+    </div>
+
+    <div class="flex gap-3">
+
+    </div>
+
+  </div>
+
+  <div class="max-w-7xl mx-auto bg-base-100 rounded-box shadow p-6 mt-8">
+
+    <div class="flex justify-between items-center border-b border-base-300 pb-4 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">Mesa {{ table?.number }}</h1>
+
+        <div class="badge rounded-full" [ngClass]="tableBadgeClass(table?.tableStatus)">
+          <div class="status status-md" [ngClass]="statusBadgeClass(table?.tableStatus)"></div>
+          {{ statusLabel(table?.tableStatus) }}
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button *ngIf="isOrderOpen(order!.orderStatus)" class="btn rounded-full bg-base-300"
+          (click)="closeOrder(order!.id)">
+          Encerrar Pedido
+        </button>
+
+        <button class="btn rounded-full bg-blue-300" *ngIf="order 
+         && isOrderOpen(order.orderStatus)" (click)="openAddItemsModal()">
+          + Itens Pedido
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Itens do pedido atual (topo) -->
+    <div class="bg-base-300 border border-base-300 rounded-box p-4 mb-6" *ngIf="order">
+      <div class="badge rounded-full" [ngClass]="tableBadgeClass(order.orderStatus)">
+        <div class="status status-md" [ngClass]="statusBadgeClass(order.orderStatus)"></div>
+        <h2>Pedido #{{ order.id }}</h2>
+      </div>
+
+      <div class="flex justify-between items-center pt-3">
+        <p class="font-bold">Total do Pedido</p>
+        <p class="font-bold text-lg">{{ order.totalAmount | currency:'BRL' }}</p>
+      </div>
+    </div>
+
+    <p *ngIf="!order" class="text-sm opacity-50 mb-6">
+      Nenhum pedido ativo nesta mesa.
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Bloco esquerdo: valor total -->
+      <div class="bg-base-300 border border-base-300 rounded-box p-4">
+        <h2 class="font-bold mb-3">Itens Pedido</h2>
+        <div class="flex justify-between items-center gap-2 py-2 border-b border-base-200 last:border-b-0"
+          *ngFor="let item of orderItemsView">
+          <p class="font-semibold text-sm">{{ item.name }} {{item.quantity}}x</p>
+          <p class="text-sm"></p>
+          <p class="text-sm">{{ item.subtotal | currency:'BRL' }}</p>
+
+        </div>
+
+      </div>
+
+      <!-- Bloco direito: histórico -->
+      <div class="bg-base-300 border border-base-300 rounded-box p-4">
+        <h2 class="font-bold mb-3">Histórico de Pedidos</h2>
+
+        <div class="flex items-center gap-2 py-2 border-b border-base-200 last:border-b-0"
+          *ngFor="let pastOrder of tableOrders" (click)="onSelectOrder(pastOrder)">
+          <div class="status status-lg" [ngClass]="statusClass(pastOrder.orderStatus)"></div>
+
+          <button type="button"
+            class="badge  rounded-full cursor-pointer hover:opacity-80 transition-opacity gap-2 border-none"
+            [ngClass]="tableBadgeClass(pastOrder.orderStatus)">
+            <div class="status status-md" [ngClass]="statusBadgeClass(pastOrder.orderStatus)"></div>
+            <p>Pedido #{{ pastOrder.id }}</p>
+          </button>
+          <p class="text-xs opacity-60">{{ pastOrder.orderDate | date:'dd/MM/yyyy' }}</p>
+
+          <p *ngIf="tableOrders.length === 0" class="text-sm opacity-50 text-center mt-4">
+            Nenhum pedido anterior
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<dialog class="modal" [open]="showAddItemsModal">
+  <div class="modal-box max-w-4xl h-[80vh] flex flex-col p-0 bg-base-100 border border-base-200 rounded-box">
+
+    <div class="flex justify-between items-center border-b border-base-200 p-4">
+      <h3 class="font-bold text-lg">Adicionar Itens — Pedido #{{ order?.id }}</h3>
+      <button class="btn btn-sm btn-circle btn-ghost" (click)="closeAddItemsModal()">✕</button>
+    </div>
+
+    <div class="grid grid-cols-12 flex-1 overflow-hidden">
+
+      <aside class="col-span-3 border-r border-base-200 p-4 overflow-auto bg-base-100">
+        <ul class="menu w-full">
+          <li *ngFor="let category of categories">
+            <a [class.active]="category.id === selectedCategoryId" (click)="onCategorySelect(category.id)">
+              {{ category.name }}
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <main class="col-span-6 p-4 overflow-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="card bg-base-100 border border-base-200 rounded-box" *ngFor="let product of filteredProducts">
+            <div class="card-body p-4">
+              <h3 class="font-bold text-sm">{{ product.name }}</h3>
+              <p class="text-xs opacity-70">{{ product.price | currency:'BRL' }}</p>
+              <button class="btn btn-outline btn-xs mt-2 w-full" (click)="onAddToCart(product)">
+                + Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="col-span-3 border-l border-base-200 p-4 flex flex-col overflow-auto bg-base-100">
+        <h4 class="font-bold text-sm mb-2">Itens a adicionar</h4>
+
+        <div class="flex justify-between items-center py-2 border-b border-base-200 last:border-b-0"
+          *ngFor="let item of cartItems">
+          <div>
+            <p class="text-xs font-semibold">{{ item.productName }}</p>
+            <p class="text-xs opacity-60">{{ item.quantity }}x {{ item.price | currency:'BRL' }}</p>
+          </div>
+        </div>
+
+        <p *ngIf="cartItems.length === 0" class="text-xs opacity-50 text-center mt-4">
+          Nenhum item selecionado
+        </p>
+      </aside>
+
+    </div>
+
+    <div class="border-t border-base-200 p-4 flex justify-end gap-2">
+      <button class="btn btn-ghost" (click)="closeAddItemsModal()">Cancelar</button>
+      <button class="btn btn-primary" [disabled]="cartItems.length === 0" (click)="onConfirmAddItems()">
+        Confirmar Adição
+      </button>
+    </div>
+
+  </div>
+
+  <form method="dialog" class="modal-backdrop" (click)="closeAddItemsModal()">
+    <button>close</button>
+  </form>
+</dialog>
