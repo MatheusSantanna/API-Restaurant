@@ -62,7 +62,7 @@ public class OrderService : IOrderService
     }
 
     public async Task<List<OrderListDTO>> GetAllOrders()
-    { // retirar os parametros que nao iremos usar e utilizar somente o mesa e o nome dos produtos
+    { 
         return await BaseOrderQuery(_orderRepository.GetAllAsync()).ToListAsync();
     }
 
