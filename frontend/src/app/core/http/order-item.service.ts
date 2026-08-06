@@ -5,7 +5,7 @@ import { OrderItemDto } from "../../models/order-item";
 
 @Injectable({ providedIn: 'root' })
 export class OrderItemService {
-    private apiUrl = 'http://localhost:5286/api/orderItem';
+    private apiUrl = 'https://localhost:7283/api/orderItem';
 
 
     constructor(private http: HttpClient) { }

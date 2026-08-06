@@ -17,7 +17,9 @@
     </div>
 
     <div class="flex gap-3">
-
+      <button (click)="goBack()" class="btn rounded-full bg-base-300">
+        Voltar
+      </button>
     </div>
 
   </div>
@@ -35,7 +37,7 @@
       </div>
 
       <div class="flex gap-2">
-        <button *ngIf="isOrderOpen(order!.orderStatus)" class="btn rounded-full bg-base-300"
+        <button *ngIf="isOrderOpen(order?.orderStatus)" class="btn rounded-full bg-base-300"
           (click)="closeOrder(order!.id)">
           Encerrar Pedido
         </button>
@@ -43,6 +45,11 @@
         <button class="btn rounded-full bg-blue-300" *ngIf="order 
          && isOrderOpen(order.orderStatus)" (click)="openAddItemsModal()">
           + Itens Pedido
+        </button>
+
+        <button class="btn rounded-full bg-blue-300" *ngIf="table 
+         && isNewOrderOpen(table.tableStatus)" (click)="openAddItemsModal()">
+          Novo Pedido
         </button>
       </div>
 
@@ -82,24 +89,43 @@
 
       <!-- Bloco direito: histórico -->
       <div class="bg-base-300 border border-base-300 rounded-box p-4">
-        <h2 class="font-bold mb-3">Histórico de Pedidos</h2>
 
+        <!-- Cabeçalho com Título e Botões de Alternância -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+          <h2 class="font-bold">Histórico de Pedidos</h2>
+
+          <!-- Abas para alternar o filtro -->
+          <div class="join">
+            <button type="button" class="join-item btn btn-xs" [class.btn-active]="showOnlyToday"
+              (click)="loadTodayOrders()">
+              Pedidos do Dia
+            </button>
+            <button type="button" class="join-item btn btn-xs" [class.btn-active]="!showOnlyToday"
+              (click)="loadAllOrders()">
+              Todas
+            </button>
+          </div>
+        </div>
+
+        <!-- Lista de Pedidos -->
         <div class="flex items-center gap-2 py-2 border-b border-base-200 last:border-b-0"
           *ngFor="let pastOrder of tableOrders" (click)="onSelectOrder(pastOrder)">
           <div class="status status-lg" [ngClass]="statusClass(pastOrder.orderStatus)"></div>
 
           <button type="button"
-            class="badge  rounded-full cursor-pointer hover:opacity-80 transition-opacity gap-2 border-none"
+            class="badge rounded-full cursor-pointer hover:opacity-80 transition-opacity gap-2 border-none"
             [ngClass]="tableBadgeClass(pastOrder.orderStatus)">
             <div class="status status-md" [ngClass]="statusBadgeClass(pastOrder.orderStatus)"></div>
             <p>Pedido #{{ pastOrder.id }}</p>
           </button>
           <p class="text-xs opacity-60">{{ pastOrder.orderDate | date:'dd/MM/yyyy' }}</p>
-
-          <p *ngIf="tableOrders.length === 0" class="text-sm opacity-50 text-center mt-4">
-            Nenhum pedido anterior
-          </p>
         </div>
+
+        <!-- Mensagem de lista vazia (fora do loop ngFor) -->
+        <p *ngIf="tableOrders.length === 0" class="text-sm opacity-50 text-center py-4">
+          Nenhum pedido {{ showOnlyToday ? 'hoje' : 'encontrado' }} para esta mesa.
+        </p>
+
       </div>
     </div>
   </div>
@@ -159,9 +185,9 @@
     </div>
 
     <div class="border-t border-base-200 p-4 flex justify-end gap-2">
-      <button class="btn btn-ghost" (click)="closeAddItemsModal()">Cancelar</button>
-      <button class="btn btn-primary" [disabled]="cartItems.length === 0" (click)="onConfirmAddItems()">
-        Confirmar Adição
+      <button class="btn rounded-full bg-base-300" (click)="closeAddItemsModal()">Cancelar</button>
+      <button class="btn rounded-full bg-blue-300" [disabled]="cartItems.length === 0" (click)="onConfirmAddItems()">
+        Adicionar Itens
       </button>
     </div>
 
